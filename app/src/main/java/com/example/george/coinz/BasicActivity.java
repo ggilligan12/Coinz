@@ -9,23 +9,46 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.mapbox.mapboxsdk.Mapbox;
+import com.mapbox.mapboxsdk.maps.MapView;
+import com.mapbox.mapboxsdk.maps.MapboxMap;
+import com.mapbox.mapboxsdk.maps.OnMapReadyCallback;
+
 public class BasicActivity extends AppCompatActivity {
+    private MapView mapView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_basic);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
+        @Override
+        public void onClick(View view) {
+           Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                   .setAction("Action", null).show();
+        }
+        });
+
+        // Mapbox Access token
+        Mapbox.getInstance(getApplicationContext(), getString(R.string.mapbox_access_token));
+        mapView = (MapView) findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
+        mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
+            public void onMapReady(MapboxMap mapboxMap) {
+
+                // Customize map with markers, polylines, etc.
+
             }
         });
+
+
+
     }
 
     @Override
