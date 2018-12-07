@@ -3,10 +3,15 @@ package com.example.george.coinz;
 import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 
+import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.Reader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 
 public class DownloadFileTask extends AsyncTask<String, Void, String> {
 
@@ -23,14 +28,21 @@ public class DownloadFileTask extends AsyncTask<String, Void, String> {
 
     @NonNull
     private String readStream(InputStream stream) throws IOException {
-        // Read input from stream, build result as a string
-
-        return "fixthis";
+        // Read input from stream, build result as a string.
+        StringBuilder textBuilder = new StringBuilder();
+        try (Reader reader = new BufferedReader(new InputStreamReader
+                (stream, Charset.forName(StandardCharsets.UTF_8.name())))) {
+            int c = 0;
+            while ((c = reader.read()) != -1) {
+                textBuilder.append((char) c);
+            }
+        }
+        return textBuilder.toString();
     }
-    @Override
-    protected void onPostExecute(String result) {
-        super.onPostExecute(result);
-        DownloadCompleteRunner.downloadComplete(result);
+
+    private String loadFileFromNetwork(String urlString) throws IOException {
+        return readStream(downloadUrl(new URL(urlString)));
+
     }
 
     @Override
@@ -39,10 +51,9 @@ public class DownloadFileTask extends AsyncTask<String, Void, String> {
         catch (IOException e) { return "Unable to load content. Check your network connection"; }
     }
 
-    private String loadFileFromNetwork(String urlString) throws IOException {
-        return readStream(downloadUrl(new URL(urlString)));
-
+    @Override
+    protected void onPostExecute(String result) {
+        super.onPostExecute(result);
     }
-
 
 }
