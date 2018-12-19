@@ -48,7 +48,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private LocationEngine locationEngine;
     private LocationLayerPlugin locationLayerPlugin;
     private Location originLocation;
-    private String downloadDate = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(new Date());
+    private String todaysDate = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(new Date());
     private final String PreferencesFile = "MyPrefsFile"; // for storing preferences
 
     // -------Lifecycle Functions-------- //
@@ -64,42 +64,36 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
             public void onMapReady(MapboxMap mapboxMap) {
+
+                String todaysDate = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(new Date());
                 SharedPreferences FromFile = getSharedPreferences(PreferencesFile, Context.MODE_PRIVATE);
-                if (FromFile.contains(downloadDate)){
-                    mapData = FromFile.getString(downloadDate, "");
+                if (FromFile.contains(todaysDate)){
+                    mapData = FromFile.getString(todaysDate, "");
                     Log.d(tag, "msg  onReady map data has been taken from file");
                 }
                 else {
                     Log.d(tag, "msg  onReady map data has been taken from file");
-                    DownloadFileTask download = new DownloadFileTask();
-                    download.execute("http://homepages.inf.ed.ac.uk/stg/coinz/2019/01/01/coinzmap.geojson");
 
+                    // Creating an instance of our AsyncTask class to pull the geoJson data down.
+                    DownloadFileTask download = new DownloadFileTask();
+                    download.execute("http://homepages.inf.ed.ac.uk/stg/coinz/"+todaysDate+"/coinzmap.geojson");
+
+                    // Force program to wait until the download has completed before attempting to drop markers.
                     try { mapData = download.get(); }
                     catch (ExecutionException e) { e.printStackTrace(); }
                     catch (InterruptedException e) { e.printStackTrace(); }
-
-                    if (mapData == null) { Log.e("debuggage", "MapData is null"); }
-                    else { Log.e(tag, "Its not null, ehhhh");}
                 }
 
                 if (mapboxMap == null) { Log.d(tag, "[onMapReady] mapBox is null"); }
                 else {
-                    //new TestDialogue().show(getSupportFragmentManager(),"tag"); //Testing
-                    //new TestDialogue().show(getSupportFragmentManager(),"tag"); //Testing
+                    // Creating the map with location enabled and interface options set.
                     map = mapboxMap;
-                    // Make location information available
                     enableLocation();
-                    // Set user interface options
                     map.getUiSettings().setCompassEnabled(true);
                     map.getUiSettings().setZoomControlsEnabled(true);
-                    //new TestDialogue().show(getSupportFragmentManager(),"tag"); //Testing
-                    Log.e("debuggage", "yet another error message");
 
-                    List<Feature> features = FeatureCollection.fromJson(mapData).features(); //Doesn't get past this line!!!!!!
-
-                    new TestDialogue().show(getSupportFragmentManager(),"tag"); //Testing
-
-                    for (int i = 0; i<features.size(); i++){
+                    List<Feature> features = FeatureCollection.fromJson(mapData).features();
+                    for (int i=0; i<features.size(); i++) {
                         try {
                             JSONObject jsonObject = new JSONObject(features.get(i).toJson());
 
@@ -107,13 +101,17 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             JSONArray coords = jsonObject.getJSONObject("geometry").getJSONArray("coordinates");
                             double lng = Double.parseDouble(coords.get(0).toString());
                             double lat = Double.parseDouble(coords.get(1).toString());
+
                             // Get the Coin's unique ID.
                             String id = jsonObject.getJSONObject("properties").getString("id");
+
                             // Get the value associated with this particular Coin.
                             double value = jsonObject.getJSONObject("properties").getDouble("value");
                             String strValue = Double.toString(value);
+
                             // Get the currency of this particular Coin.
                             String currency = jsonObject.getJSONObject("properties").getString("currency");
+
                             // Add the marker on the map.
                             mapboxMap.addMarker(new MarkerOptions()
                                     .position(new LatLng(lat,lng))
@@ -121,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                                     .setSnippet("Value -" +strValue));
                             Log.d(tag, "[onMapReady] Adding marking "+i+" to map");
                         }
-                        catch (JSONException e){ e.printStackTrace(); }
+                        catch (JSONException e) { e.printStackTrace(); }
                     }
 
                 }
@@ -139,8 +137,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         // Restore preferences
         SharedPreferences settings = getSharedPreferences(PreferencesFile, Context.MODE_PRIVATE);
         // use ”” as the default value (this might be the first time the app is run)
-        downloadDate = settings.getString("lastDownloadDate", "");
-        Log.d(tag, "[onStart] Recalled lastDownloadDate is ’" + downloadDate + "’");
+        todaysDate = settings.getString("lastDownloadDate", "");
+        Log.d(tag, "[onStart] Recalled lastDownloadDate is ’" + todaysDate + "’");
     }
     @Override
     protected void onResume() {
@@ -172,12 +170,12 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(tag, "[onStop] Storing lastDownloadDate of " + downloadDate);
+        Log.d(tag, "[onStop] Storing lastDownloadDate of " + todaysDate);
         // All objects are from android.context.Context
         SharedPreferences settings = getSharedPreferences(PreferencesFile, Context.MODE_PRIVATE);
         // We need an Editor object to make preference changes.
         SharedPreferences.Editor editor = settings.edit();
-        editor.putString("lastDownloadDate", downloadDate);
+        editor.putString("lastDownloadDate", todaysDate);
         // Apply the edits!
         editor.apply();
     }
