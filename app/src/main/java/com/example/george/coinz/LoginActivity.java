@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         // Getting the Firebase auth instance.
         auth = FirebaseAuth.getInstance();
 
-        // Transferring to the signup activity.
+        // Transferring to the sign-up activity.
         btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) { startActivity(new Intent(LoginActivity.this, SignupActivity.class)); }
