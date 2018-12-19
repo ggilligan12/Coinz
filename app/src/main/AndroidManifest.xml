@@ -47,7 +47,10 @@
             android:name=".ResetPasswordActivity"
             android:label="@string/title_activity_reset_password"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".SettingsActivity"></activity>
+        <activity android:name=".SettingsActivity" />
+        <activity android:name=".ItemsActivity" />
+        <activity android:name=".MailActivity" />
+        <activity android:name=".BankActivity"></activity>
     </application>
 
 </manifest>

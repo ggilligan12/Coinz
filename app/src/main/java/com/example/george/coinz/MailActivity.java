@@ -7,9 +7,9 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
-public class SettingsActivity extends AppCompatActivity {
+public class MailActivity extends AppCompatActivity {
 
-    private Button logoutButton;
+    private Button backButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,16 +17,14 @@ public class SettingsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_settings);
 
 
-        logoutButton = (Button) findViewById(R.id.btn_logout);
+        backButton = (Button) findViewById(R.id.btn_mail_back);
 
         // Transferring to the main activity.
-        logoutButton.setOnClickListener(new View.OnClickListener() {
+        backButton.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v) { startActivity(new Intent(SettingsActivity.this, MainActivity.class)); }
+            public void onClick(View v) { startActivity(new Intent(MailActivity.this, MainActivity.class)); }
         });
 
     }
-
-
 
 }

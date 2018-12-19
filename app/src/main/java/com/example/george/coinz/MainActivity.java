@@ -1,12 +1,17 @@
 package com.example.george.coinz;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.Location;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import com.mapbox.android.core.location.LocationEngine;
 import com.mapbox.android.core.location.LocationEngineListener;
@@ -56,6 +61,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        ///// MAPBOX RELATED STUFF /////
 
         // Mapbox Access token
         Mapbox.getInstance(getApplicationContext(), getString(R.string.mapbox_access_token));
@@ -116,7 +124,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                             mapboxMap.addMarker(new MarkerOptions()
                                     .position(new LatLng(lat,lng))
                                     .title(currency)
-                                    .setSnippet("Value -" +strValue));
+                                    .setSnippet("Value: "+strValue));
                             Log.d(tag, "[onMapReady] Adding marking "+i+" to map");
                         }
                         catch (JSONException e) { e.printStackTrace(); }
@@ -125,6 +133,26 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                 }
             }
         });
+        ///// END OF MAPBOX RELATED STUFF /////
+
+
+        ///// BUTTONS!! /////
+
+        // Transferring to the settings activity.
+        FloatingActionButton settingsButton = findViewById(R.id.btn_settings);
+        settingsButton.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, SettingsActivity.class)));
+
+        // Transferring to the items activity.
+        FloatingActionButton itemsButton = findViewById(R.id.btn_items);
+        itemsButton.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, ItemsActivity.class)));
+
+        // Transferring to the mail activity.
+        FloatingActionButton mailButton = findViewById(R.id.btn_mail);
+        mailButton.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, MailActivity.class)));
+
+        // Transferring to the bank activity.
+        FloatingActionButton bankButton = findViewById(R.id.btn_bank);
+        bankButton.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, BankActivity.class)));
 
     }
     @Override
@@ -136,7 +164,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         // Restore preferences
         SharedPreferences settings = getSharedPreferences(PreferencesFile, Context.MODE_PRIVATE);
-        // use ”” as the default value (this might be the first time the app is run)
+        // Using ”” as the default value as this might be the first time the app is run.
         todaysDate = settings.getString("lastDownloadDate", "");
         Log.d(tag, "[onStart] Recalled lastDownloadDate is ’" + todaysDate + "’");
     }
