@@ -103,7 +103,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         bankButton.setOnClickListener(v -> startActivity(new Intent(MainActivity.this, BankActivity.class)));
 
     }
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -190,14 +189,13 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             enableLocation();
             map.getUiSettings().setCompassEnabled(true);
             map.getUiSettings().setZoomControlsEnabled(true);
+            // Implementing the functionality for picking up markers.
             map.setOnMarkerClickListener(this::onMarkerClick);
 
             List<Feature> features = FeatureCollection.fromJson(mapData).features();
             ArrayList<String> markerCurrencies = new ArrayList<>();
             ArrayList<Float> markerValues = new ArrayList<>();
             ArrayList<String> markerIDs = new ArrayList<>();
-
-
 
             for (int i=0; i<features.size(); i++) {
                 try {
@@ -236,12 +234,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
         }
     }
-
-
-
-
-
-
 
 
     private void enableLocation() {

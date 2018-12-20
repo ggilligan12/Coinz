@@ -2,12 +2,23 @@
   <dictionary name="george">
     <words>
       <w>coinzmap</w>
+      <w>coords</w>
       <w>dolr</w>
+      <w>dolrs</w>
+      <w>dtext</w>
+      <w>firebase</w>
       <w>firestore</w>
       <w>geojson</w>
+      <w>ltext</w>
       <w>mapbox</w>
+      <w>mrkrs</w>
       <w>peny</w>
+      <w>penys</w>
+      <w>rtext</w>
       <w>shil</w>
+      <w>shils</w>
+      <w>todays</w>
+      <w>ytext</w>
     </words>
   </dictionary>
 </component>
