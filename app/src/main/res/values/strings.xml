@@ -55,11 +55,14 @@
 
     <!-- Strings related to Bank -->
     <string name="btn_bank_back">Back</string>
-    <string name="SHIL_text">SHILS</string>
+    <string name="shil_text">SHILS</string>
     <string name="DOLR_text">DOLRS</string>
     <string name="QUID_text">QUIDS</string>
     <string name="PENY_text">PENYS</string>
-    <!-- <string name="" -->
+    <string name="shils">SHILS</string>
+    <string name="dolrs">DOLRS</string>
+    <string name="quids">QUIDS</string>
+    <string name="penys">PENYS</string>
 
 
 

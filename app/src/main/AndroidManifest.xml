@@ -19,7 +19,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme"
+        android:theme="@android:style/Theme.NoTitleBar"
         tools:ignore="GoogleAppIndexingWarning">
         <activity
             android:name=".LoginActivity"
@@ -47,10 +47,18 @@
             android:name=".ResetPasswordActivity"
             android:label="@string/title_activity_reset_password"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".SettingsActivity" />
-        <activity android:name=".ItemsActivity" />
-        <activity android:name=".MailActivity" />
-        <activity android:name=".BankActivity"></activity>
+        <activity
+            android:name=".SettingsActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".ItemsActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".MailActivity"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity
+            android:name=".BankActivity"
+            android:theme="@style/AppTheme.NoActionBar"/><!--</activity>-->
     </application>
 
 </manifest>

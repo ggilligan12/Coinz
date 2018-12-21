@@ -15,17 +15,15 @@ public class MailActivity extends AppCompatActivity {
     private FirebaseFirestore firestore;
     private DocumentReference firestoreChat;
 
-    private Button backButton;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_settings);
+        setContentView(R.layout.activity_mail);
 
 
-        backButton = findViewById(R.id.btn_mail_back);
+        Button backButton = findViewById(R.id.btn_mail_back);
         // Transferring to the main activity.
-        backButton.setOnClickListener(v -> startActivity(new Intent(MailActivity.this, MainActivity.class)));
+        backButton.setOnClickListener(v -> finish());
 
 
 

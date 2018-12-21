@@ -21,4 +21,96 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.017" />
+
+    <TextView
+        android:id="@+id/quids"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="QUIDS"
+        tools:layout_editor_absoluteX="216dp"
+        tools:layout_editor_absoluteY="193dp" />
+
+    <TextView
+        android:id="@+id/dolrs"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="DOLRS"
+        tools:layout_editor_absoluteX="216dp"
+        tools:layout_editor_absoluteY="133dp" />
+
+    <TextView
+        android:id="@+id/penys"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="PENYS"
+        tools:layout_editor_absoluteX="216dp"
+        tools:layout_editor_absoluteY="246dp" />
+
+    <TextView
+        android:id="@+id/shils"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="SHILS"
+        tools:layout_editor_absoluteX="216dp"
+        tools:layout_editor_absoluteY="85dp" />
+
+    <android.support.design.widget.TextInputLayout
+        android:layout_width="200dp"
+        android:layout_height="wrap_content"
+        tools:layout_editor_absoluteX="8dp"
+        tools:layout_editor_absoluteY="90dp">
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="90dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/DOLR_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="hint" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="90dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/QUID_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="hint" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:layout_editor_absoluteX="8dp"
+            tools:layout_editor_absoluteY="90dp">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/PENY_text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="hint" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputEditText
+            android:id="@+id/SHIL_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="hint" />
+    </android.support.design.widget.TextInputLayout>
+
+    <Button
+        android:id="@+id/pocket"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Pocket"
+        tools:layout_editor_absoluteX="147dp"
+        tools:layout_editor_absoluteY="352dp" />
 </android.support.constraint.ConstraintLayout>

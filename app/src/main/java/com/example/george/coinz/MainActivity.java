@@ -1,7 +1,6 @@
 package com.example.george.coinz;
 
 import android.Manifest;
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,8 +12,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -52,6 +49,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback, LocationEngineListener, PermissionsListener {
@@ -68,8 +66,18 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     private String todaysDate = new SimpleDateFormat("yyyy/MM/dd", Locale.getDefault()).format(new Date());
     private final String PreferencesFile = "MyPrefsFile"; // for storing preferences
 
-    private FirebaseAuth mAuth;
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
+
+    // ------ Wallet ------ //
+    private static ArrayList<Coin> Wallet;
+    // Add a coin to the wallet.
+    public static void updateWallet(ArrayList<Coin> wal, String curr, Float val, String id) {
+        Coin coin = new Coin();
+        Coin.setCurrency(curr); Coin.setValue(val); Coin.setID(id);
+        wal.add(coin);
+        Wallet = wal;
+    }
+    public static ArrayList<Coin> getWallet() { return Wallet; }
 
     // -------Lifecycle Functions-------- //
     @Override
@@ -158,6 +166,8 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     }
 
 
+    // ---- Auxiliary Functions ---- //
+
     // onMapReady, takes mapbox instance, downloads and drops the GeoJson markers of the day,
     // and implements an onClickListener to pick them up and add them to a users Firestore account.
     @Override
@@ -178,8 +188,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
 
             // Force program to wait until the download has completed before attempting to drop markers.
             try { mapData = download.get(); }
-            catch (ExecutionException e) { e.printStackTrace(); }
-            catch (InterruptedException e) { e.printStackTrace(); }
+            catch (ExecutionException | InterruptedException e) { e.printStackTrace(); }
         }
 
         if (mapboxMap == null) { Log.d(tag, "[onMapReady] mapBox is null"); }
@@ -197,7 +206,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             ArrayList<Float> markerValues = new ArrayList<>();
             ArrayList<String> markerIDs = new ArrayList<>();
 
-            for (int i=0; i<features.size(); i++) {
+            assert features != null;
+            for (int i = 0; i<features.size(); i++) {
+
                 try {
                     JSONObject jsonObject = new JSONObject(features.get(i).toJson());
 
@@ -307,9 +318,9 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public void onPermissionResult(boolean granted) {
         Log.d(tag, "[onPermissionResult] granted == " + granted);
         if (granted) { enableLocation(); }
-        else {
+        /*else {
         // Open a dialogue with the user
-        }
+        }*/
     }
 
     @Override
@@ -327,26 +338,26 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     public static ArrayList<Float> getMarkerVal() { return markerVal; }
 
     private static ArrayList<String> markerID = new ArrayList<>();
-    //public static ArrayList<String> getMarkerID() { return markerID; }
+    public static ArrayList<String> getMarkerID() { return markerID; }
     public static void setMarkerID(ArrayList<String> markerID) { MainActivity.markerID = markerID; }
 
 
     public boolean onMarkerClick (Marker mr) {
 
-        mAuth = FirebaseAuth.getInstance();
-        String email = mAuth.getCurrentUser().getEmail();
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        String email = Objects.requireNonNull(mAuth.getCurrentUser()).getEmail();
         CollectionReference users = db.collection("users");
         List<Marker> mrkrs = map.getMarkers();
 
-        // Getting our location, and the value and currency of the marker.
+        // Getting our location, and the value, ID & currency of the marker.
         String cur = getMarkerCur().get(mrkrs.indexOf(mr));
-        Log.d(tag, "curr is " + cur);
         Float val = getMarkerVal().get(mrkrs.indexOf(mr));
+        String id = getMarkerID().get(mrkrs.indexOf(mr));
         Log.d(tag, mr.getTitle());
         LatLng loc = new LatLng(originLocation.getLatitude(), originLocation.getLongitude());
 
         // Proximity check.
-        if (mr.getPosition().distanceTo(loc) <= 25 && !(markerID.get(mrkrs.indexOf(mr)).isEmpty())) {
+        if (mr.getPosition().distanceTo(loc) <= 250 && !(markerID.get(mrkrs.indexOf(mr)).isEmpty()) && email!=null) {
 
             switch (cur) {
                 case ("SHIL"):
@@ -378,7 +389,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
                     break;
 
             }
-
+            updateWallet(Wallet,cur,val,id);
             markerID.set(mrkrs.indexOf(mr), " ");
             map.removeMarker(mr);
             Log.d(tag, "click click hurrah!");
